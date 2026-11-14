@@ -1,5 +1,8 @@
 export const invitationCopy = {
-  greeting: { arabic: 'السلام عليكم', english: 'Assalamu Alaikum', useCalligraphyImage: true },
+  greetings: {
+    traditional: { arabic: 'السلام عليكم', english: 'Assalamu Alaikum', useCalligraphyImage: true },
+    friendly: { arabic: '', english: 'Hi, have a great day', useCalligraphyImage: false },
+  },
   blessings: {
     arabic: '﷽',
     invocation: 'In the Name of Allah,',

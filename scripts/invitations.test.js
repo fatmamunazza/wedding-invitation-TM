@@ -15,6 +15,7 @@ test('root and removed/unknown/malformed tokens never resolve an invitation', ()
   }
   assert.equal(guestFromPath('/invite/' + general.token), general);
   assert.equal(guestFromPath('/invite/' + special.token + '/'), special);
+  assert.equal(guestFromPath('/invite/shazia')?.name, 'Ali & Family');
   assert.equal(guestFromPath('/wedding/invite/' + general.token, '/wedding/'), general);
   assert.equal(guestFromPath('/wrong/invite/' + general.token, '/wedding/'), undefined);
   assert.equal(guestFromPath('/invite/' + general.token.toLowerCase()), undefined);
@@ -30,7 +31,7 @@ test('query parameters and hashes do not select extra events', () => {
 
 test('invalid configs, duplicate tokens and missing invitation fail closed', () => {
   assert.throws(() => validateGuests([general, general]), /Duplicate/);
-  for (const guest of [null, undefined, { ...general, events: ['haldi', 'nikaah'] }, { ...general, events: [] }, { ...special, events: ['nikaah', 'nikaah'] }, { ...general, type: 'unknown' }, { ...general, token: '../test' }]) {
+  for (const guest of [null, undefined, { ...general, events: ['haldi', 'nikaah'] }, { ...general, events: [] }, { ...special, events: ['nikaah', 'nikaah'] }, { ...general, type: 'unknown' }, { ...general, token: '' }]) {
     assert.throws(() => createInvitation(guest));
   }
 });

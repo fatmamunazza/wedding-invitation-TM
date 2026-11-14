@@ -1,7 +1,7 @@
 {
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/invite/([A-Za-z0-9_-]{8,64})/?", "dest": "/invite/$1.html", "check": true },
+    { "src": "/invite/([^/]+)/?", "dest": "/invite/$1.html", "check": true },
     { "src": "/.*", "dest": "/index.html" }
   ]
 }

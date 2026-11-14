@@ -86,6 +86,16 @@ test('guest invitations filter scenes, calendar hearts and event summaries toget
     invitation.timeline.forEach((page, index) => assert.equal(page.start, invitation.pages.slice(0, index).reduce((sum, item) => sum + item.duration, 0)));
   }
 });
+test('greeting preset is selected by each invite greetingId', () => {
+  const guest = guests.find(item => item.type === 'general');
+  const friendlyGreeting = createInvitation({ ...guest, greetingId: 'friendly' }).timeline.find(page => page.id === 'greeting').blocks;
+  assert.deepEqual(friendlyGreeting.map(block => block.value).filter(Boolean), ['Hi, have a great day']);
+  assert.equal(friendlyGreeting.some(block => block.type === 'image' || block.lang === 'ar'), false);
+  const defaultGreeting = createInvitation(guest).timeline.find(page => page.id === 'greeting').blocks;
+  assert.ok(defaultGreeting.some(block => block.type === 'image' && block.alt === 'السلام عليكم'));
+  assert.ok(defaultGreeting.some(block => block.type === 'text' && block.value === 'Assalamu Alaikum'));
+  assert.throws(() => createInvitation({ ...guest, greetingId: 'unknown' }));
+});
 test('v19 closing and invitation copy preserve the approved wording and placement', () => {
   assert.equal(pages.find(page => page.id === 'greeting').duration, 3);
   assert.ok(!pages.some(page => page.id === 'prayer'));

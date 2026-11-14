@@ -24,6 +24,7 @@ export function formatTime(value) {
 export function buildPages(d, c, a, guest = null) {
   if (!isValidInvitation(guest)) throw new Error('A valid invitation is required to render event pages.');
   const h = d.events.haldi, n = d.events.nikaah, np = dateParts(n.date);
+  const greeting = c.greetings[guest.greetingId || 'traditional'];
   const footer = d.shortNames.toUpperCase() + '   •   ' + dateParts(h.date).month.toUpperCase() + ' ' + dateParts(h.date).year;
   const base = (id, label, duration, blocks, options = {}) =>
     ({ id, label, duration, theme: 'pink', zoom: 1.2, footer, settleAt: 6.5, blocks, ...options });
@@ -31,10 +32,10 @@ export function buildPages(d, c, a, guest = null) {
   const all = [
     base('opening', 'Envelope', 5, [], { kind: 'opening', zoom: 1, footer: null }),
     base('greeting', 'Greeting', 3, [
-      c.greeting.useCalligraphyImage
-        ? image(a.greetingCalligraphy, 735, 540, { maxHeight: 280, alt: c.greeting.arabic, lang: 'ar' })
-        : text(c.greeting.arabic, 760, 142, 'arabic', '#000000', { lang: 'ar', width: 700 }),
-      text(c.greeting.english, 1040, 49, 'body', '#94505c', { weight: 600 }),
+      ...(greeting.useCalligraphyImage
+        ? [image(a.greetingCalligraphy, 735, 540, { maxHeight: 280, alt: greeting.arabic, lang: 'ar' })]
+        : greeting.arabic ? [text(greeting.arabic, 760, 142, 'arabic', '#000000', { lang: 'ar', width: 700 })] : []),
+      text(greeting.english, 1040, 49, 'body', '#94505c', { weight: 600 }),
     ], { zoom: 1, footer: null, reveal: false }),
     base('blessings', 'Blessings', 8, [
       text(c.blessings.arabic, 480, 105, 'arabic', 'accent', { width: 540, lang: 'ar' }),

@@ -83,6 +83,23 @@ Manage entries in **src/data/guest.js**. Each has `token`, `name`, `type` and `e
 - `general`: `events: ['nikaah']` — Nikaah only.
 - `special`: `events: ['haldi', 'nikaah']` — both celebrations.
 
+Choose one of the greeting presets per entry using `greetingId`:
+
+```js
+{
+  token: 'ExampleToken123',
+  name: 'Guest Family',
+  type: 'general',
+  events: ['nikaah'],
+  greetingId: 'friendly',
+}
+```
+
+Available IDs are `traditional` (Assalamu Alaikum with Arabic calligraphy) and
+`friendly` (Hi, have a great day, without Arabic). If `greetingId` is omitted,
+the traditional greeting is used. Greeting text and artwork are configured in
+**src/data/invitationCopy.js**.
+
 The build validates type/event consistency and duplicate tokens. Names may be blank.
 Two working entries are included:
 
