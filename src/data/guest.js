@@ -26,9 +26,13 @@ export function validateGuests(entries) {
 }
 
 export const guests = Object.freeze(validateGuests([
-  { token: 'K9e_L2xT7zDBrbme', name: '', type: 'general', events: ['nikaah'], greetingId: 'traditional' },
-  { token: 'VwVUp3gC_nzVOUa9', name: '', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
-  { token: 'shazia', name: 'Ali & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
+  { token: 't_tmNikah', name: '', type: 'general', events: ['nikaah'], greetingId: 'traditional' },
+  { token: 't_tmCelebrations', name: '', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
+  { token: 'f_tmNikah', name: '', type: 'general', events: ['nikaah'], greetingId: 'friendly' },
+  { token: 'f_tmCelebrations', name: '', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
+  { token: 'shazia', name: 'Shazia & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
+  { token: 'akriti', name: 'Akriti & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
+  { token: 'anupriya', name: 'Anupriya & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
 ]).map(guest => Object.freeze({
   ...guest,
   events: Object.freeze([...guest.events]),
