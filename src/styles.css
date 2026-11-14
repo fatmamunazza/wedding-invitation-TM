@@ -60,7 +60,6 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 @media (prefers-reduced-motion: reduce) { .music-note.running { animation: none; } }
 
 .falling-petal { position: absolute; height: auto; pointer-events: none; user-select: none; }
-.farewell-controls { bottom: max(112px, calc(env(safe-area-inset-bottom) + 94px)); }
 @media (prefers-reduced-motion: reduce) { .heart-effect path:first-child, .heart-effect path:nth-child(n+3) { display: none; } }
 
 .download-control { position: absolute; z-index: 30; top: max(74px, calc(env(safe-area-inset-top) + 56px)); right: max(18px, env(safe-area-inset-right)); text-decoration: none; }
@@ -73,3 +72,18 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 .export-actions { display: flex; gap: 12px; }
 .export-actions button, .export-save { border-radius: 24px; padding: 10px 22px; border: 1px solid #b69282; color: #63303e; background: #fff8f0; text-decoration: none; cursor: pointer; }
 .export-save { background: #79253c; color: #fff8ef; border-color: #79253c; }
+
+/* The public welcome and invalid-link states reuse the invitation artwork. */
+.welcome-page { position: relative; min-height: 100svh; min-height: 100dvh; display: grid; place-items: center; padding: 20vh 22px; isolation: isolate; color: #63303e; font-family: var(--body-font); }
+.welcome-page__background { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+.welcome-page__background img { width: 100%; height: 100%; object-fit: cover; }
+.welcome-page__copy { width: min(70vw, 420px); text-align: center; }
+.welcome-page__crest { width: clamp(66px, 12vw, 94px); height: auto; }
+.welcome-page__greeting { letter-spacing: .05em; font-size: 18px; }
+.welcome-page h1 { font-family: var(--script-font); font-size: clamp(32px, 6vw, 52px); line-height: 1.2; font-weight: 400; margin: 18px 0; }
+.welcome-page p { line-height: 1.6; font-size: 18px; margin: 14px auto; }
+.welcome-page__divider { display: block; width: 130px; margin: 18px auto; color: #a57a48; border-bottom: 1px solid #b78e6866; padding-bottom: 12px; }
+.welcome-page .welcome-page__hint { font-size: 16px; max-width: 30ch; }
+.welcome-page a { display: inline-block; padding: 12px 22px; margin-top: 16px; border: 1px solid #b69282; border-radius: 24px; text-decoration: none; background: #fff8f0cc; }
+@media (min-aspect-ratio: 1/1) { .welcome-page__copy { width: min(42vw, 440px); } }
+@media (max-height: 600px) { .welcome-page { padding-block: 30px; } .welcome-page__crest { width: 52px; } .welcome-page p { margin: 8px auto; } }

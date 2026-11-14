@@ -1,3 +1,4 @@
+import { isValidInvitation } from './guest.js';
 // Page composition is data, too: wording, positions, fonts, colours and timing.
 export const text = (value, y, size = 42, font = 'body', color = 'ink', extra = {}) =>
   ({ type: 'text', value, x: 540, y, width: 620, size, font, color, ...extra });
@@ -21,6 +22,7 @@ export function formatTime(value) {
   return String(hour % 12 || 12).padStart(2, '0') + ':' + String(minute).padStart(2, '0') + (hour >= 12 ? ' PM' : ' AM');
 }
 export function buildPages(d, c, a, guest = null) {
+  if (!isValidInvitation(guest)) throw new Error('A valid invitation is required to render event pages.');
   const h = d.events.haldi, n = d.events.nikaah, np = dateParts(n.date);
   const footer = d.shortNames.toUpperCase() + '   •   ' + dateParts(h.date).month.toUpperCase() + ' ' + dateParts(h.date).year;
   const base = (id, label, duration, blocks, options = {}) =>
@@ -89,11 +91,11 @@ export function buildPages(d, c, a, guest = null) {
       image(a.crest, 1760, 110, { alt: 'MT wedding crest' }),
     ], { theme: 'farewell', footer: null, smallCrest: false, settleAt: 8 }),
   ];
-  const eventIds = guest ? guest.events : Object.keys(d.events);
+  const eventIds = guest.events;
   const selected = Object.values(d.events).filter(event => eventIds.includes(event.id));
   if (!selected.length) throw new Error('Each guest must have at least one valid event.');
   return all.filter(page => !d.events[page.id] || eventIds.includes(page.id)).map(page => {
-    if (page.id === 'greeting' && guest) page.blocks.push(text(guest.name, 1170, 49, 'script', 'accent', { guestName: true }));
+    if (page.id === 'greeting' && guest.name) page.blocks.push(text(guest.name, 1170, 49, 'script', 'accent', { guestName: true }));
     if (page.id === 'save-dates') {
       page.blocks = page.blocks.filter(block => !(block.y === 1380 && !eventIds.includes(h.id)) && !(block.y === 1470 && !eventIds.includes(n.id)));
       const calendar = page.blocks.find(block => block.type === 'calendar');

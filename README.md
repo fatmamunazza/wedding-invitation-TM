@@ -71,19 +71,65 @@ npm test checks the latest approved sequence/time values, data propagation betwe
 
 The four desktop backgrounds were created with the built-in ImageGen tool using the approved portrait artwork as visual references. Prompts requested a 16:9 ivory carved floral arch and lakeside setting, broad blank central space, lace and lantern, with matching pastel pink, yellow Haldi and maroon Nikaah variants. The envelope prompt requested symmetrical ivory embossed doors, pink satin ribbon, pearl tassels and an empty central oval for the existing MT crest. No text was generated into the artwork. Files: desktop-pink.webp, desktop-haldi.webp, desktop-nikaah.webp and desktop-envelope.webp in public/assests/. Mobile artwork is preserved.
 
-## Guest invitations
+## Guest invitations and share previews
 
-Edit **src/data/guest.js** and replace the sample entries:
+The root `/` shows a generic wedding welcome with no dates, venues or event list.
+`/invite/{token}` opens only the events configured for that token. Unknown tokens,
+old named IDs and other routes show “Invitation not found”; they never fall back
+ to either invitation. Query parameters and hash fragments cannot add events.
 
-```js
-{ id: 'ali-family', name: 'Ali & Family', events: ['haldi', 'nikaah'] }
-{ id: 'haldi-guest', name: 'Guest Name', events: ['haldi'] }
-{ id: 'nikaah-guest', name: 'Guest Name', events: ['nikaah'] }
+Manage entries in **src/data/guest.js**. Each has `token`, `name`, `type` and `events`:
+
+- `general`: `events: ['nikaah']` — Nikaah only.
+- `special`: `events: ['haldi', 'nikaah']` — both celebrations.
+
+The build validates type/event consistency and duplicate tokens. Names may be blank.
+Two working entries are included:
+
+- General: `/invite/K9e_L2xT7zDBrbme`
+- Special (Ali & Family): `/invite/VwVUp3gC-nzVOUa9`
+
+Generate a fresh random token using Node's built-in crypto (no new package):
+
+```sh
+npm run invite:new -- general "Guest Name & Family"
+npm run invite:new -- special "Guest Name & Family"
 ```
 
-Share **https://your-domain.com/invite/ali-family**. The guest name appears below Assalamu Alaikum, including as the envelope opens. Only the assigned event scenes, calendar hearts, event date summaries appear. The three navigation controls use the filtered sequence; the URL stays fixed. The root URL shows the general invitation with both events. Unknown guest IDs show “Invitation not found”.
+Copy the printed entry into the `guests` array in **src/data/guest.js**, then run
+`npm test` and `npm run build`, and redeploy `dist`. Share the printed URL using
+your actual website domain. Generate a separate token for each guest if desired;
+do not change a general token to special after sharing it. To revoke a link,
+remove its entry and rebuild/redeploy. Existing named links are intentionally invalid.
 
-The production host must serve **index.html** for `/invite/*` paths (SPA fallback). Vite development and preview servers do this automatically. A Netlify-style `_redirects` fallback is included in public/. For nginx use `try_files $uri $uri/ /index.html;`. For deployment under a subfolder, set the Vite `base` to that absolute folder path before building. Guest data is bundled with this static app; guest IDs personalize the invitation and are not access control.
+**src/data/sharing.js** selects the existing Nikaah-only or Haldi + Nikaah JPEG in
+`public/assests/`. The public root uses the MT crest with no event details.
+**scripts/generate-invite-previews.js** writes one static HTML entry per token
+(`dist/invite/{token}.html` and a matching directory index) containing the correct Open Graph/Twitter tags
+and the same React app. This is a build step, not a backend or server-rendered app.
+This lets sharing crawlers read the correct preview without executing JavaScript.
+
+Set `siteUrl` in **src/data/sharing.js** to your deployed domain. Alternatively:
+
+```sh
+SITE_URL=https://your-domain.com npm run build
+```
+
+On Vercel, `VERCEL_PROJECT_PRODUCTION_URL` is used automatically when available;
+`SITE_URL` takes precedence. The supplied **vercel.json** serves actual static files
+first, then falls back to the React entry for invalid routes. Directory index files
+support direct visits and refreshes on valid invitations. For another static host,
+retain directory-index serving and add an SPA fallback for unknown paths. No new
+packages or runtime services are required. The app remains a single React experience;
+scene navigation never changes the URL.
+
+Preview images contain printed details: update the JPEGs if you change dates or times.
+WhatsApp/social services may cache previews or crop portrait images; a new token
+usually gets a fresh preview. Test after deployment; localhost cannot be crawled publicly.
+
+This is intentionally frontend-only. Tokens prevent accidental disclosure through
+ordinary navigation, not inspection of bundled JavaScript or public images. Anyone
+with a valid special link can open or forward it. No authentication is provided.
 
 ## Video v19 update
 
@@ -114,7 +160,7 @@ The desktop panels now follow the original mobile frame’s rounded dome and ste
 
 After opening the envelope, tap the download icon below the music icon. The app renders a new portrait invitation from **src/data/** and the images/music in **public/assests/**. It shows a progress preview and Cancel button. When finished, tap **Save video**. The underlying invitation pauses during export and its controls are not included in the movie.
 
-There is **no pre-rendered MP4 asset**. Changing names, event dates, wording, page order, artwork, music offset or animation settings changes the next generated video. Default output is a generic invitation with both events and no guest name, matching the requested v19 mobile composition. Set **settings.download.scope** to **'guest'** to instead include the current guest’s name and assigned event pages/calendar hearts.
+There is **no pre-rendered MP4 asset**. Changing names, event dates, wording, page order, artwork, music offset or animation settings changes the next generated video. The export always keeps the current invitation’s permitted events and calendar hearts. The 'generic' scope only omits the guest name; 'guest' includes it. Download visibility stays at your existing settings.download.enabled value (currently false).
 
 The export always uses mobile artwork and coordinates, even from a desktop screen. Settings in **settings.download** control dimensions (default 1080×1920), frame rate (24), video/audio bitrate, filename, scope and visibility. The current generic sequence produces 78 seconds. Music is decoded only for the selected interval, starts at settings.audio.offsetSeconds (72), follows the configured volume, and fades at the beginning/end.
 

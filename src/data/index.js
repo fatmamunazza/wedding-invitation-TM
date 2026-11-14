@@ -19,5 +19,4 @@ export function createInvitation(guest = null) {
   timeline.find(page => page.id === 'opening').greeting = greeting;
   return { pages, timeline, totalDuration: start };
 }
-export const { pages, timeline, totalDuration } = createInvitation();
 export const assetUrl = path => import.meta.env.BASE_URL + path.replace(/^\/+/, '');

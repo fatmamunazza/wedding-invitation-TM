@@ -6,7 +6,7 @@ const yieldToBrowser = () => new Promise(resolve => setTimeout(resolve, 0));
 
 export async function exportPortraitVideo({ canvas, signal, onProgress, guest = null }) {
   const config = settings.download;
-  const invitation = createInvitation(config.scope === 'guest' ? guest : null);
+  const invitation = createInvitation(guest && config.scope !== 'guest' ? { ...guest, name: '' } : guest);
   const duration = invitation.totalDuration;
   let renderer, output, input;
   let cancelling = false;

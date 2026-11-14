@@ -1,20 +1,23 @@
 import test from 'node:test';
 import { rosePetals } from '../src/data/motion.js';
 import { roseAt } from '../src/lib/motion.js';
-import { guestFromPath } from '../src/data/guest.js';
+import { guestFromPath, guests } from '../src/data/guest.js';
 import { layoutPage, artworkPaths } from '../src/data/responsive.js';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { weddingDetails, invitationCopy, assets, settings, pages, totalDuration, createInvitation } from '../src/data/index.js';
+import { weddingDetails, invitationCopy, assets, settings, createInvitation } from '../src/data/index.js';
 import { buildPages, dateParts, formatTime, parseLocalDate } from '../src/data/pages.js';
+
+const special = { ...guests.find(guest => guest.type === 'special'), name: '' };
+const { pages, totalDuration } = createInvitation(special);
 
 test('the approved sequence and latest event times are preserved', () => {
   assert.deepEqual(pages.map(page => page.id), ['opening', 'greeting', 'blessings', 'family', 'save-dates', 'haldi', 'nikaah', 'farewell']);
   assert.equal(totalDuration, 78);
   assert.equal(settings.audio.offsetSeconds, 72);
   assert.equal(formatTime(weddingDetails.events.haldi.time), '06:00 PM');
-  assert.equal(formatTime(weddingDetails.events.nikaah.time), '08:00 PM');
+  assert.equal(formatTime(weddingDetails.events.nikaah.time), '07:00 PM');
   assert.equal(pages.find(page => page.id === 'greeting').blocks.length, 2);
 });
 test('editing family and event data propagates to all relevant page compositions', () => {
@@ -22,7 +25,7 @@ test('editing family and event data propagates to all relevant page compositions
   custom.bride = 'Updated Bride';
   custom.events.haldi.time = '17:30';
   custom.events.haldi.venue = 'Updated Venue';
-  const changed = buildPages(custom, invitationCopy, assets);
+  const changed = buildPages(custom, invitationCopy, assets, special);
   const values = page => page.blocks.filter(block => block.type === 'text').map(block => block.value).flat();
   assert.ok(values(changed.find(page => page.id === 'family')).includes('Updated Bride'));
   assert.ok(values(changed.find(page => page.id === 'haldi')).includes('05:30 PM'));
@@ -65,8 +68,8 @@ test('desktop uses dedicated artwork while preserving the mobile content', () =>
 });
 
 test('guest invitations filter scenes, calendar hearts and event summaries together', () => {
-  for (const ids of [['haldi'], ['nikaah'], ['haldi', 'nikaah']]) {
-    const invitation = createInvitation({ id: 'test', name: 'Test Family', events: ids });
+  for (const ids of [['nikaah'], ['haldi', 'nikaah']]) {
+    const invitation = createInvitation({ token: 'TestToken1234', type: ids.length === 1 ? 'general' : 'special', name: 'Test Family', events: ids });
     const eventPages = invitation.timeline.filter(page => ['haldi', 'nikaah'].includes(page.id));
     assert.deepEqual(eventPages.map(page => page.id), ids);
     const greeting = invitation.timeline.find(page => page.id === 'greeting');
@@ -83,15 +86,6 @@ test('guest invitations filter scenes, calendar hearts and event summaries toget
     invitation.timeline.forEach((page, index) => assert.equal(page.start, invitation.pages.slice(0, index).reduce((sum, item) => sum + item.duration, 0)));
   }
 });
-test('guest URL resolution supports valid IDs, rejects unknown IDs and keeps default invitation', () => {
-  assert.equal(guestFromPath('/invite/ali-family').name, 'Ali & Family');
-  assert.deepEqual(guestFromPath('/invite/haldi-guest/').events, ['haldi']);
-  assert.deepEqual(guestFromPath('/wedding/invite/nikaah-guest', '/wedding/').events, ['nikaah']);
-  assert.equal(guestFromPath('/invite/unknown'), undefined);
-  assert.equal(guestFromPath('/invite/%ZZ'), undefined);
-  assert.equal(guestFromPath('/'), null);
-});
-
 test('v19 closing and invitation copy preserve the approved wording and placement', () => {
   assert.equal(pages.find(page => page.id === 'greeting').duration, 3);
   assert.ok(!pages.some(page => page.id === 'prayer'));

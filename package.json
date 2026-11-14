@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-invite-previews.js",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --test scripts/data.test.js"
+    "test": "node --test scripts/*.test.js",
+    "invite:new": "node scripts/new-invitation.js"
   },
   "dependencies": {
     "@fontsource/amiri": "5.3.0",

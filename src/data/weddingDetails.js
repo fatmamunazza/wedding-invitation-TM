@@ -17,7 +17,7 @@ export const weddingDetails = {
       theme: 'haldi',
     },
     nikaah: {
-      id: 'nikaah', title: 'Nikaah', date: '2027-01-16', time: '20:00',
+      id: 'nikaah', title: 'Nikaah', date: '2027-01-16', time: '19:00',
       venue: 'Parmeshwar Banquet Hall',
       address: ['Kumhrar Gomti, Sandalpur,', 'Patna, Bihar 800006'],
       mapLink: 'https://maps.app.goo.gl/KysNQywZqKiAmdEx7',

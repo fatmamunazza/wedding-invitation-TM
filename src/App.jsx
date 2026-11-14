@@ -6,6 +6,8 @@ import { VideoExport } from './components/VideoExport.jsx';
 import { Controls } from './components/Controls.jsx';
 import { guestFromPath } from './data/guest.js';
 import { usePlayer } from './hooks/usePlayer.js';
+import { WelcomePage } from './components/WelcomePage.jsx';
+import { InvitationMetadata } from './components/InvitationMetadata.jsx';
 
 function useArtwork(mode) {
   const [status, setStatus] = useState('loading');
@@ -26,8 +28,21 @@ function useArtwork(mode) {
 }
 
 export default function App() {
-  const guest = useMemo(() => guestFromPath(location.pathname, import.meta.env.BASE_URL), []);
-  const { timeline, totalDuration } = useMemo(() => createInvitation(guest || null), [guest]);
+  const [pathname, setPathname] = useState(() => location.pathname);
+  useEffect(() => {
+    const update = () => setPathname(location.pathname);
+    window.addEventListener('popstate', update);
+    return () => window.removeEventListener('popstate', update);
+  }, []);
+  const guest = guestFromPath(pathname, import.meta.env.BASE_URL);
+  return <>
+    <InvitationMetadata guest={guest} />
+    {guest ? <InvitationPlayer key={guest.token} guest={guest} /> : <WelcomePage invalid={guest === undefined} />}
+  </>;
+}
+
+function InvitationPlayer({ guest }) {
+  const { timeline, totalDuration } = useMemo(() => createInvitation(guest), [guest]);
   const player = usePlayer(timeline, totalDuration);
   const [exporting, setExporting] = useState(false);
   const [mode, setMode] = useState(() => matchMedia(responsive.desktopMedia).matches ? 'desktop' : 'mobile');
@@ -55,7 +70,6 @@ export default function App() {
     return () => observer.disconnect();
   }, [canvas.width, canvas.height]);
   useEffect(() => {
-    document.title = weddingDetails.shortNames + ' · Wedding Invitation';
     // Keep scene navigation inside React state and clear links from older versions.
     if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   }, []);
@@ -71,8 +85,6 @@ export default function App() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [player.playing, player.pause, player.play, player.goTo, active.index, status, exporting]);
-
-  if (guest === undefined) return <main className="loading-state"><p>Invitation not found. Please check your invitation link.</p></main>;
 
   return <main className={'invitation-app layout-' + mode}
     style={{ '--body-font': settings.typography.body, '--script-font': settings.typography.script }}>

@@ -28,17 +28,17 @@ export function Controls({ player, active, timeline, totalDuration, onExport }) 
         <path d="M12 3v12m-5-5 5 5 5-5M4 15v5h16v-5" />
       </svg>
     </button>}
-    <div className={'overlay-controls' + (active.id === 'farewell' ? ' farewell-controls' : '')} aria-label="Invitation playback controls">
-    <button className="arrow-control" aria-label={l.previous} onClick={() => player.goTo(timeline[Math.max(0, active.index - 1)].id)} disabled={active.index === 0}>
-      <Icon name="previous" />
-    </button>
-    <button className="play-control" aria-label={player.playing ? l.pause : l.start}
-      onClick={() => player.playing ? player.pause() : player.play(player.time >= totalDuration)}>
-      <Icon name={player.playing ? 'pause' : 'play'} />
-    </button>
-    <button className="arrow-control" aria-label={l.next} onClick={() => player.goTo(timeline[Math.min(timeline.length - 1, active.index + 1)].id)} disabled={active.index === timeline.length - 1}>
-      <Icon name="next" />
-    </button>
-  </div>
+    <div className={'overlay-controls'} aria-label="Invitation playback controls">
+      <button className="arrow-control" aria-label={l.previous} onClick={() => player.goTo(timeline[Math.max(0, active.index - 1)].id)} disabled={active.index === 0}>
+        <Icon name="previous" />
+      </button>
+      <button className="play-control" aria-label={player.playing ? l.pause : l.start}
+        onClick={() => player.playing ? player.pause() : player.play(player.time >= totalDuration)}>
+        <Icon name={player.playing ? 'pause' : 'play'} />
+      </button>
+      <button className="arrow-control" aria-label={l.next} onClick={() => player.goTo(timeline[Math.min(timeline.length - 1, active.index + 1)].id)} disabled={active.index === timeline.length - 1}>
+        <Icon name="next" />
+      </button>
+    </div>
   </>;
 }
