@@ -15,7 +15,7 @@ test('root and removed/unknown/malformed tokens never resolve an invitation', ()
   }
   assert.equal(guestFromPath('/invite/' + general.token), general);
   assert.equal(guestFromPath('/invite/' + special.token + '/'), special);
-  assert.equal(guestFromPath('/invite/shazia')?.name, 'Ali & Family');
+  assert.equal(guestFromPath('/invite/shazia')?.name, guests.find(g => g.token === 'shazia').name);
   assert.equal(guestFromPath('/wedding/invite/' + general.token, '/wedding/'), general);
   assert.equal(guestFromPath('/wrong/invite/' + general.token, '/wedding/'), undefined);
   assert.equal(guestFromPath('/invite/' + general.token.toLowerCase()), undefined);

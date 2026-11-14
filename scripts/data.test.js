@@ -89,8 +89,9 @@ test('guest invitations filter scenes, calendar hearts and event summaries toget
 test('greeting preset is selected by each invite greetingId', () => {
   const guest = guests.find(item => item.type === 'general');
   const friendlyGreeting = createInvitation({ ...guest, greetingId: 'friendly' }).timeline.find(page => page.id === 'greeting').blocks;
-  assert.deepEqual(friendlyGreeting.map(block => block.value).filter(Boolean), ['Hi, have a great day']);
-  assert.equal(friendlyGreeting.some(block => block.type === 'image' || block.lang === 'ar'), false);
+  assert.ok(friendlyGreeting.some(block => block.type === 'text' && block.value === invitationCopy.greetings.friendly.arabic));
+  assert.ok(friendlyGreeting.some(block => block.type === 'text' && block.value === invitationCopy.greetings.friendly.english));
+  assert.equal(friendlyGreeting.some(block => block.type === 'image'), false);
   const defaultGreeting = createInvitation(guest).timeline.find(page => page.id === 'greeting').blocks;
   assert.ok(defaultGreeting.some(block => block.type === 'image' && block.alt === 'السلام عليكم'));
   assert.ok(defaultGreeting.some(block => block.type === 'text' && block.value === 'Assalamu Alaikum'));
