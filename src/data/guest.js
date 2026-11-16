@@ -37,7 +37,7 @@ export const guests = Object.freeze(validateGuests([
   { token: 'ariba', name: 'Ariba & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'aeysha', name: 'Aeysha & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'mehar', name: 'Mehar & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
-  { token: 'aashu', name: 'Aashu Pgle', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
+  { token: 'ashu', name: 'Ashu Pgle', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'ruma', name: 'Amir, Ruma & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'munira', name: 'Munira & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'akriti', name: 'Akriti & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
@@ -49,7 +49,9 @@ export const guests = Object.freeze(validateGuests([
   { token: 'richa', name: 'Richa & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
   { token: 'bhoomika', name: 'Bhoomika & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
   { token: 'bhavya', name: 'Bhavya & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
-
+  { token: 'kavitha', name: 'Kavitha & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
+  { token: 'Raishma', name: 'Raishma & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
+  { token: 'karar', name: 'Karar & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
 ]).map(guest => Object.freeze({
   ...guest,
   events: Object.freeze([...guest.events]),
