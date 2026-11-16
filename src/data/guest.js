@@ -40,6 +40,7 @@ export const guests = Object.freeze(validateGuests([
   { token: 'jagriti', name: 'Jagriti & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
   { token: 'komal', name: 'Komal & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
   { token: 'anupriya', name: 'Anupriya & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
+  { token: 'raghav', name: 'Raghav, Kanchan & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' }
 ]).map(guest => Object.freeze({
   ...guest,
   events: Object.freeze([...guest.events]),

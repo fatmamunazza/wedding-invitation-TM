@@ -34,7 +34,9 @@ export function layoutPage(source, mode = 'mobile') {
     if (block.type === 'calendar') Object.assign(next, { y: d.calendar.monthY, calendarLayout: d.calendar });
     if (source.id === 'greeting') {
       if (block.type === 'image') Object.assign(next, { y: 300, width: 560, maxHeight: 300 });
-      else Object.assign(next, block.guestName ? { y: 760, size: 48 } : { y: 650, size: 44 });
+      else if (block.guestName) Object.assign(next, { y: 760, size: 48 });
+      else if (block.font === 'arabic') Object.assign(next, { y: 390, size: 64 });
+      else Object.assign(next, { y: 650, size: 44 });
     }
     if (source.id === 'save-dates' && block.type === 'text' && block.y === 450) Object.assign(next, { y: 240, size: 62 });
     if (source.id === 'haldi') {

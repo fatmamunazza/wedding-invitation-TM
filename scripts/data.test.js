@@ -97,6 +97,21 @@ test('greeting preset is selected by each invite greetingId', () => {
   assert.ok(defaultGreeting.some(block => block.type === 'text' && block.value === 'Assalamu Alaikum'));
   assert.throws(() => createInvitation({ ...guest, greetingId: 'unknown' }));
 });
+test('friendly greeting lines have separate desktop positions without changing mobile', () => {
+  const guest = guests.find(item => item.type === 'general');
+  const page = createInvitation({ ...guest, greetingId: 'friendly' }).timeline.find(item => item.id === 'greeting');
+  const mobile = layoutPage(page, 'mobile');
+  const desktop = layoutPage(page, 'desktop');
+  const mobileGreeting = mobile.blocks.find(block => block.font === 'arabic');
+  const mobileCelebration = mobile.blocks.find(block => block.value === 'To our celebrations ');
+  const desktopGreeting = desktop.blocks.find(block => block.font === 'arabic');
+  const desktopCelebration = desktop.blocks.find(block => block.value === 'To our celebrations ');
+
+  assert.equal(mobileGreeting.y, 760);
+  assert.equal(mobileCelebration.y, 1040);
+  assert.equal(desktopGreeting.y, 390);
+  assert.equal(desktopCelebration.y, 650);
+});
 test('v19 closing and invitation copy preserve the approved wording and placement', () => {
   assert.equal(pages.find(page => page.id === 'greeting').duration, 3);
   assert.ok(!pages.some(page => page.id === 'prayer'));
