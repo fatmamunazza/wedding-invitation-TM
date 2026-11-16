@@ -30,7 +30,7 @@ export const guests = Object.freeze(validateGuests([
   { token: 't_tmCelebrations', name: '', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'f_tmNikah', name: '', type: 'general', events: ['nikaah'], greetingId: 'friendly' },
   { token: 'f_tmCelebrations', name: '', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'friendly' },
-  { token: 'shazia', name: 'Shazia & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
+  { token: 'shazia', name: 'Dilshad, Shazia & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'fatima', name: 'Fatima & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'tehseen', name: 'Tehseen & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
   { token: 'rabab', name: 'Rabab & Family', type: 'special', events: ['haldi', 'nikaah'], greetingId: 'traditional' },
